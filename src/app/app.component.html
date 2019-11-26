@@ -1,0 +1,10 @@
+<mat-form-field>
+  <input matInput placeholder="Select a user" [matAutocomplete]="auto" [formControl]="userControl">
+  <mat-autocomplete #auto="matAutocomplete">
+    <mat-option *ngFor="let user of filteredUsers | async" [value]="user.email">
+      <span>{{ user.firstName }} {{ user.lastName }} &lt;{{user.email}}&gt;</span>
+    </mat-option>
+  </mat-autocomplete>
+</mat-form-field>
+
+<button (click)="submit()">Submit</button>
