@@ -1,5 +1,5 @@
 <mat-form-field>
-	<input matInput placeholder="Select a user" [matAutocomplete]="auto" [formControl]="userControl">
+	<input matInput placeholder="Search by Name or Email" [matAutocomplete]="auto" [formControl]="userControl">
 	<mat-autocomplete #auto="matAutocomplete">
 		<mat-option *ngFor="let user of filteredUsers | async" [value]="user.email">
 			<span>{{ user.firstName }} {{ user.lastName }} &lt;{{user.email}}&gt;</span>
