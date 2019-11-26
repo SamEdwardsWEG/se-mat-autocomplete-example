@@ -1,19 +1,21 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 
-import { FormControl } from '@angular/forms'
+import { FormControl } from '@angular/forms';
 
 import {Observable} from 'rxjs';
-import {map, startWith} from 'rxjs/operators';
+import {map, startWith, tap} from 'rxjs/operators';
 
 @Component({
   selector: 'my-app',
   templateUrl: './app.component.html',
   styleUrls: [ './app.component.css' ]
 })
-export class AppComponent  {
-  name = 'Angular';
+export class AppComponent implements OnInit  {
+
   filteredUsers: Observable<User[]>;
   userControl = new FormControl();
+
+  selectedUsers = [];
 
   users: User[] = [
     {
@@ -38,7 +40,7 @@ export class AppComponent  {
     }
   ];
 
-  constructor() {
+  ngOnInit() {
     this.filteredUsers = this.userControl.valueChanges
     .pipe(
       startWith(''),
@@ -47,7 +49,8 @@ export class AppComponent  {
   }
 
   submit() {
-    console.log(this.userControl.value)
+    this.selectedUsers.push(this.userControl.value);
+    console.log(this.selectedUsers)
   }
 
   private _filterUsers(value: string): User[] {
