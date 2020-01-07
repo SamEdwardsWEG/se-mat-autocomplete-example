@@ -1,17 +1,16 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit } from "@angular/core";
 
-import { FormControl } from '@angular/forms';
+import { FormControl } from "@angular/forms";
 
-import {Observable} from 'rxjs';
-import {map, startWith, tap} from 'rxjs/operators';
+import { Observable } from "rxjs";
+import { map, startWith, tap } from "rxjs/operators";
 
 @Component({
-  selector: 'my-app',
-  templateUrl: './app.component.html',
-  styleUrls: [ './app.component.css' ]
+  selector: "my-app",
+  templateUrl: "./app.component.html",
+  styleUrls: ["./app.component.css"]
 })
-export class AppComponent implements OnInit  {
-
+export class AppComponent implements OnInit {
   filteredUsers: Observable<User[]>;
   userControl = new FormControl();
 
@@ -19,46 +18,52 @@ export class AppComponent implements OnInit  {
 
   users: User[] = [
     {
-      firstName: 'Sam',
-      lastName: 'Edwards',
-      email: 'sam.g.edwards@warwick.ac.uk'
+      firstName: "Sam",
+      lastName: "Edwards",
+      email: "sam.g.edwards@warwick.ac.uk"
     },
     {
-      firstName: 'Sam',
-      lastName: 'Edwards',
-      email: 'uk_sam2003@hotmail.com'
+      firstName: "Sam",
+      lastName: "Edwards",
+      email: "uk_sam2003@hotmail.com"
     },
     {
-      firstName: 'Hayley',
-      lastName: 'McCabe',
-      email: 'hayleyjanemccabe@hotmail.co.uk'
+      firstName: "Hayley",
+      lastName: "McCabe",
+      email: "hayleyjanemccabe@hotmail.co.uk"
     },
     {
-      firstName: 'Hayley',
-      lastName: 'Edwards',
-      email: 'hayleyedwards@hotmail.com'
+      firstName: "Hayley",
+      lastName: "Edwards",
+      email: "hayleyedwards@hotmail.com"
     }
   ];
 
   ngOnInit() {
-    this.filteredUsers = this.userControl.valueChanges
-    .pipe(
-      startWith(''),
-      map(user => user ? this._filterUsers(user) : this.users.slice())
-    )
+    this.filteredUsers = this.userControl.valueChanges.pipe(
+      startWith(""),
+      map(user => (user ? this._filterUsers(user) : this.users.slice()))
+    );
   }
 
   submit() {
     this.selectedUsers.push(this.userControl.value);
-    console.log(this.selectedUsers)
+    console.log(this.selectedUsers);
   }
 
   private _filterUsers(value: string): User[] {
     const filterValue = value.toLowerCase();
 
-    return this.users.filter(user => user.firstName.toLowerCase().includes(filterValue)
-        || user.lastName.toLowerCase().includes(filterValue)
-        || user.email.toLowerCase().includes(filterValue));
+    if (filterValue.length >= 3) {
+      return this.users.filter(
+        user =>
+          user.firstName.toLowerCase().includes(filterValue) ||
+          user.lastName.toLowerCase().includes(filterValue) ||
+          user.email.toLowerCase().includes(filterValue)
+      );
+    } else {
+      return this.users;
+    }
   }
 }
 
