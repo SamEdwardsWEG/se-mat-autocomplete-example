@@ -2,7 +2,7 @@ import { Component, OnInit } from "@angular/core";
 
 import { FormControl } from "@angular/forms";
 
-import { Observable } from "rxjs";
+import { Observable, of } from "rxjs";
 import { map, startWith, tap } from "rxjs/operators";
 
 @Component({
@@ -11,39 +11,36 @@ import { map, startWith, tap } from "rxjs/operators";
   styleUrls: ["./app.component.css"]
 })
 export class AppComponent implements OnInit {
-  filteredUsers: Observable<User[]>;
   userControl = new FormControl();
 
   selectedUsers = [];
 
-  users: User[] = [
+  users: Observable<User[]> = of([
     {
-      firstName: "Sam",
-      lastName: "Edwards",
+      name: "Sam Edwards",
       email: "sam.g.edwards@warwick.ac.uk"
     },
     {
-      firstName: "Sam",
-      lastName: "Edwards",
+      name: "Sam Edwards",
       email: "uk_sam2003@hotmail.com"
     },
     {
-      firstName: "Hayley",
-      lastName: "McCabe",
+      name: "Hayley McCabe",
       email: "hayleyjanemccabe@hotmail.co.uk"
     },
     {
-      firstName: "Hayley",
-      lastName: "Edwards",
+      name: "Hayley Edwards",
       email: "hayleyedwards@hotmail.com"
     }
-  ];
+  ]);
+  filteredUsers = this.users;
 
   ngOnInit() {
-    this.filteredUsers = this.userControl.valueChanges.pipe(
-      startWith(""),
-      map(user => (user ? this._filterUsers(user) : this.users.slice()))
-    );
+    this.userControl.valueChanges.pipe(
+      startWith(''),
+      tap(console.log),
+      map(value => (value ? this._filterUsers(value) : this.users))
+    ).subscribe(res => this.filteredUsers = res);
   }
 
   submit() {
@@ -51,15 +48,18 @@ export class AppComponent implements OnInit {
     console.log(this.selectedUsers);
   }
 
-  private _filterUsers(value: string): User[] {
+  private _filterUsers(value: string): Observable<User[]> {
     const filterValue = value.toLowerCase();
 
-    if (filterValue.length >= 3) {
-      return this.users.filter(
-        user =>
-          user.firstName.toLowerCase().includes(filterValue) ||
-          user.lastName.toLowerCase().includes(filterValue) ||
-          user.email.toLowerCase().includes(filterValue)
+    if (filterValue.length > 2) {
+      return this.users.pipe(
+        map(users => {
+          return users.filter(
+            user =>
+              user.name.toLowerCase().includes(filterValue) ||
+              user.email.toLowerCase().includes(filterValue)
+        )}
+      )
       );
     } else {
       return this.users;
@@ -68,7 +68,6 @@ export class AppComponent implements OnInit {
 }
 
 export interface User {
-  firstName: string;
-  lastName: string;
+  name: string;
   email: string;
 }
