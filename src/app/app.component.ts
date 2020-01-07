@@ -51,7 +51,7 @@ export class AppComponent implements OnInit {
   private _filterUsers(value: string): Observable<User[]> {
     const filterValue = value.toLowerCase();
 
-    if (filterValue.length > 2) {
+    if (filterValue.length >= 3) {
       return this.users.pipe(
         map(users => {
           return users.filter(
