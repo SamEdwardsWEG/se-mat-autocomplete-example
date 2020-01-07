@@ -10,6 +10,7 @@ import { ReactiveFormsModule } from '@angular/forms'
 import { MatAutocompleteModule } from '@angular/material/autocomplete'
 import {MatFormFieldModule} from '@angular/material/form-field';
 import {MatInputModule} from '@angular/material/input';
+import { DataService } from './data-service.service';
 
 @NgModule({
   imports:      [ 
@@ -21,6 +22,7 @@ import {MatInputModule} from '@angular/material/input';
     MatInputModule
      ],
   declarations: [ AppComponent ],
-  bootstrap:    [ AppComponent ]
+  bootstrap:    [ AppComponent ],
+  providers: [DataService]
 })
 export class AppModule { }

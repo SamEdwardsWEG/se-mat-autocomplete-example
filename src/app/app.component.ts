@@ -1,9 +1,10 @@
 import { Component, OnInit } from "@angular/core";
-
 import { FormControl } from "@angular/forms";
 
 import { Observable, of } from "rxjs";
 import { map, startWith, tap } from "rxjs/operators";
+
+import {DataService} from './data-service.service';
 
 @Component({
   selector: "my-app",
@@ -11,29 +12,13 @@ import { map, startWith, tap } from "rxjs/operators";
   styleUrls: ["./app.component.css"]
 })
 export class AppComponent implements OnInit {
+
   userControl = new FormControl();
-
   selectedUsers = [];
-
-  users: Observable<User[]> = of([
-    {
-      name: "Sam Edwards",
-      email: "sam.g.edwards@warwick.ac.uk"
-    },
-    {
-      name: "Sam Edwards",
-      email: "uk_sam2003@hotmail.com"
-    },
-    {
-      name: "Hayley McCabe",
-      email: "hayleyjanemccabe@hotmail.co.uk"
-    },
-    {
-      name: "Hayley Edwards",
-      email: "hayleyedwards@hotmail.com"
-    }
-  ]);
+  users: Observable<User[]> = this.dataService.getUsers();
   filteredUsers = this.users;
+
+  constructor(private dataService: DataService) { }
 
   ngOnInit() {
     this.userControl.valueChanges.pipe(
